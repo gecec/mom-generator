@@ -1,0 +1,11 @@
+{
+	"id": "mom-generator",
+	"name": "MOM Generator",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Generates MOM for selected meetings",
+	"author": "Gecec",
+	"authorUrl": "https://localhost",
+	"fundingUrl": "https://localhost/pricing",
+	"isDesktopOnly": false
+}
