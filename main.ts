@@ -7,6 +7,7 @@ import {
 	Plugin,
 	PluginSettingTab,
 	Setting,
+	Vault,
 } from "obsidian";
 
 // Remember to rename these classes and interfaces!
@@ -92,6 +93,41 @@ export default class HelloWorldPlugin extends Plugin {
 		this.registerInterval(
 			window.setInterval(() => console.log("setInterval"), 5 * 60 * 1000),
 		);
+
+		this.addCommand({
+			id: "convert-to-uppercase",
+			name: "Convert to uppercase",
+			editorCallback: (editor: Editor) => {
+				const selection = editor.getSelection();
+				const tasks = selection.split("\n");
+
+				for (const idx in tasks) {
+					const newTask = tasks[idx].replace("- [ ] ", "");
+					const today: Date = new Date();
+
+					let month = (today.getMonth() + 1).toString();
+					if (today.getMonth() + 1 < 10) {
+						month = "0" + month;
+					}
+
+					let day = today.getDate().toString();
+					if (today.getDate() < 10) {
+						day = "0" + day;
+					}
+
+					const dateString =
+						today.getFullYear() + "-" + month + "-" + day;
+					// check if file already exists or not
+					// check if folder exists
+					this.app.vault.create(
+						"MOM/" + dateString + "-" + newTask + ".md",
+						"qwerty",
+					);
+				}
+
+				// editor.replaceSelection(selection.toUpperCase());
+			},
+		});
 	}
 
 	onunload() {}
