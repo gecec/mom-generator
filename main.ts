@@ -1,23 +1,21 @@
 import {
 	App,
 	Editor,
-	MarkdownView,
 	Modal,
 	Notice,
 	Plugin,
 	PluginSettingTab,
 	Setting,
-	Vault,
 } from "obsidian";
 
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
-	mySetting: string;
+	rootFolder: string;
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: "default",
+	rootFolder: "MOM",
 };
 
 export default class HelloWorldPlugin extends Plugin {
@@ -63,10 +61,11 @@ export default class HelloWorldPlugin extends Plugin {
 				const selection = editor.getSelection();
 				const tasks = selection.split("\n");
 				const vault = this.app.vault;
+				const rootFolder = this.settings.rootFolder;
 				// check if folder exists
-				const momFolder = vault.getFolderByPath("MOM");
+				const momFolder = vault.getFolderByPath(rootFolder);
 				if (momFolder == null) {
-					vault.createFolder("MOM");
+					vault.createFolder(rootFolder);
 				}
 
 				for (const idx in tasks) {
@@ -87,7 +86,7 @@ export default class HelloWorldPlugin extends Plugin {
 						today.getFullYear() + "-" + month + "-" + day;
 
 					const filePath =
-						"MOM/" + dateString + "-" + newTask + ".md";
+						rootFolder + "/" + dateString + "-" + newTask + ".md";
 
 					// check if file already exists or not
 					const file = vault.getFileByPath(filePath);
@@ -146,14 +145,14 @@ class SampleSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName("Setting #1")
-			.setDesc("It's a secret")
+			.setName("root-folder-name")
+			.setDesc("MOM root folder name")
 			.addText((text) =>
 				text
-					.setPlaceholder("Enter your secret")
-					.setValue(this.plugin.settings.mySetting)
+					.setPlaceholder("Enter folder name")
+					.setValue(this.plugin.settings.rootFolder)
 					.onChange(async (value) => {
-						this.plugin.settings.mySetting = value;
+						this.plugin.settings.rootFolder = value;
 						await this.plugin.saveSettings();
 					}),
 			);
