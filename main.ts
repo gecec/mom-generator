@@ -69,7 +69,11 @@ export default class HelloWorldPlugin extends Plugin {
 				}
 
 				for (const idx in tasks) {
-					const newTask = tasks[idx].replace("- [ ] ", "");
+					const newTask = tasks[idx]
+						.replace("- [ ] ", "")
+						.replace(/\[/gi, "")
+						.replace(/\]/gi, "");
+
 					const today: Date = new Date();
 
 					let month = (today.getMonth() + 1).toString();
