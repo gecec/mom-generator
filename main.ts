@@ -86,7 +86,7 @@ export default class HelloWorldPlugin extends Plugin {
 						today.getFullYear() + "-" + month + "-" + day;
 
 					const filePath =
-						rootFolder + "/" + dateString + "-" + newTask + ".md";
+						rootFolder + "/" + dateString + " " + newTask + ".md";
 
 					// check if file already exists or not
 					const file = vault.getFileByPath(filePath);

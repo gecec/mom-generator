@@ -1,7 +1,7 @@
 # Obsidian MOM generator Plugin
 
 In daily file I have a list of meetings. I select meetings, press a hotkey, plugin should generate MOM files.
-MOM file name should have next format "MOM/<YYYY-MM-DD>-<meeting-name>. MOM template should be used.
+MOM file name should have next format "MOM/<YYYY-MM-DD><space><meeting-name>". MOM template should be used.
 
 Algorithm:
 - read selected lines (meeting names)
