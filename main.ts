@@ -69,10 +69,12 @@ export default class HelloWorldPlugin extends Plugin {
 				}
 
 				for (const idx in tasks) {
-					const newTask = tasks[idx]
+					const taskTitle = tasks[idx]
 						.replace("- [ ] ", "")
 						.replace(/\[/gi, "")
 						.replace(/\]/gi, "");
+
+					if (taskTitle == "") continue;
 
 					const today: Date = new Date();
 
@@ -90,7 +92,7 @@ export default class HelloWorldPlugin extends Plugin {
 						today.getFullYear() + "-" + month + "-" + day;
 
 					const filePath =
-						rootFolder + "/" + dateString + " " + newTask + ".md";
+						rootFolder + "/" + dateString + " " + taskTitle + ".md";
 
 					// check if file already exists or not
 					const file = vault.getFileByPath(filePath);
