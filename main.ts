@@ -6,6 +6,7 @@ import {
 	Plugin,
 	PluginSettingTab,
 	Setting,
+	TFile,
 } from "obsidian";
 
 // Remember to rename these classes and interfaces!
@@ -68,6 +69,7 @@ export default class HelloWorldPlugin extends Plugin {
 					vault.createFolder(rootFolder);
 				}
 
+				const promisesForMDLinks: Promise<TFile>[] = [];
 				for (const idx in tasks) {
 					const newTask = tasks[idx]
 						.replace("- [ ] ", "")
@@ -95,11 +97,39 @@ export default class HelloWorldPlugin extends Plugin {
 					// check if file already exists or not
 					const file = vault.getFileByPath(filePath);
 					if (file == null) {
-						vault.create(filePath, "");
+						const momFile = vault.create(filePath, "");
+						promisesForMDLinks.push(momFile);
+						// momFile
+						// 	.then((f) =>
+						// 		this.app.fileManager.generateMarkdownLink(
+						// 			f,
+						// 			f.path,
+						// 		),
+						// 	)
+						// 	.then((link) => tasks[idx] + " " + link)
+						// 	.then((t) => newTasks.push(t))
+						// 	.then(() =>
+						// 		editor.replaceSelection(newTasks.join("\n")),
+						// 	);
 					} else {
 						console.warn("File already exists", filePath);
 					}
 				}
+
+				Promise.all(promisesForMDLinks).then((values) => {
+					const newLines: string[] = [];
+					for (const f in values) {
+						const mdLink =
+							this.app.fileManager.generateMarkdownLink(
+								f,
+								f.path,
+							);
+						newLines.push();
+					}
+				});
+
+				// console.log("new selection", newTasks.join("\n"));
+				// editor.replaceSelection(newTasks.join("\n"));
 			},
 		});
 	}
@@ -116,6 +146,10 @@ export default class HelloWorldPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+	}
+
+	addTaskWithMOMLink(file: TFile, originalName: string) {
+		return this.app.fileManager.generateMarkdownLink(f, f.path);
 	}
 }
 
