@@ -8,6 +8,8 @@ import {
 	Setting,
 } from "obsidian";
 
+import MomPluginLogic from "./plugin";
+
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
@@ -69,30 +71,10 @@ export default class HelloWorldPlugin extends Plugin {
 				}
 
 				for (const idx in tasks) {
-					const taskTitle = tasks[idx]
-						.replace("- [ ] ", "")
-						.replace(/\[/gi, "")
-						.replace(/\]/gi, "");
+					const fileName = MomPluginLogic.buildFileName(tasks[idx]);
 
-					if (taskTitle == "") continue;
-
-					const today: Date = new Date();
-
-					let month = (today.getMonth() + 1).toString();
-					if (today.getMonth() + 1 < 10) {
-						month = "0" + month;
-					}
-
-					let day = today.getDate().toString();
-					if (today.getDate() < 10) {
-						day = "0" + day;
-					}
-
-					const dateString =
-						today.getFullYear() + "-" + month + "-" + day;
-
-					const filePath =
-						rootFolder + "/" + dateString + " " + taskTitle + ".md";
+					if (fileName == "") continue;
+					const filePath = rootFolder + fileName;
 
 					// check if file already exists or not
 					const file = vault.getFileByPath(filePath);
