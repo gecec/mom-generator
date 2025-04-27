@@ -9,6 +9,7 @@ import {
 } from "obsidian";
 
 import MomPluginLogic from "./plugin";
+import DeleteModal from "delete-modal";
 
 // Remember to rename these classes and interfaces!
 
@@ -84,6 +85,49 @@ export default class HelloWorldPlugin extends Plugin {
 						console.warn("File already exists", filePath);
 					}
 				}
+			},
+		});
+
+		this.addCommand({
+			id: "delete-mom",
+			name: "Delete MOM for a selected meeting",
+			editorCallback: (editor: Editor) => {
+				// get selected Text
+				// check if only 1 meeting selected
+				// check if title not empty
+				// check if file exists
+				// show popup with file path -> how to show popups
+				// remove file -> how to remove files
+				//
+				const selection = editor.getSelection();
+				const tasks = selection.split("\n");
+				if (tasks.length != 1) {
+					// show error
+					new Notice(`Only one meeting can be selected for deletion`);
+					console.warn(
+						"Only one meeting can be selected for deletion",
+					);
+					return;
+				}
+				const fileName = MomPluginLogic.buildFileName(tasks[0]);
+				if (fileName == "") return;
+				const rootFolder = this.settings.rootFolder;
+				const filePath = rootFolder + "/" + fileName;
+				// check if file already exists or not
+				const vault = this.app.vault;
+				const file = vault.getFileByPath(filePath);
+				if (file == null) {
+					new Notice(`File ${filePath} doesn't exists`);
+					console.warn(`File ${filePath} doesn't exists`);
+					return;
+				}
+
+				new DeleteModal(this.app, filePath, (result) => {
+					if (result) {
+						vault.delete(file);
+						new Notice(`Removed , ${filePath}!`);
+					}
+				}).open();
 			},
 		});
 	}
