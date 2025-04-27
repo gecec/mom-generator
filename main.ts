@@ -74,7 +74,7 @@ export default class HelloWorldPlugin extends Plugin {
 					const fileName = MomPluginLogic.buildFileName(tasks[idx]);
 
 					if (fileName == "") continue;
-					const filePath = rootFolder + fileName;
+					const filePath = rootFolder + "/" + fileName;
 
 					// check if file already exists or not
 					const file = vault.getFileByPath(filePath);

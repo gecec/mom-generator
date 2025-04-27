@@ -3,7 +3,9 @@ export default class MomPluginLogic {
 		return title
 			.replace("- [ ] ", "")
 			.replace(/\[/gi, "")
-			.replace(/\]/gi, "");
+			.replace(/\]/gi, "")
+			.replace(/\//gi, "<slash>")
+			.replace(/\\/gi, "<backslash>");
 	}
 
 	static todayDateString(): string {
@@ -26,6 +28,6 @@ export default class MomPluginLogic {
 		const cleanTitle = this.cleanseTaskName(taskTitle);
 		if (cleanTitle == "") return "";
 		const dateString = this.todayDateString();
-		return dateString + " " + taskTitle + ".md";
+		return dateString + " " + cleanTitle + ".md";
 	}
 }
